@@ -11,9 +11,12 @@ using namespace std;
 class Humans
 {
 private:
+	string name;
 
 public:
 	Humans();
+	void SetName(string nameInput);
+	string GetName();
 	void Rest();
 	void Countine();
 	void Hunt();

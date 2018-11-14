@@ -127,6 +127,10 @@
     <ClInclude Include="Humans.h" />
     <ClInclude Include="Milestones.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="fort-milestones.txt" />
+    <Text Include="river-milestones.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

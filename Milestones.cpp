@@ -9,3 +9,8 @@
 #include <string>
 #include "Milestones.h"
 using namespace std;
+
+Milestones::Milestones()
+{
+
+}

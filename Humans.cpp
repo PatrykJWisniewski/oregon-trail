@@ -9,3 +9,18 @@
 #include <string>
 #include "Humans.h"
 using namespace std;
+
+Humans::Humans()
+{
+	name = "";
+}
+
+void Humans::SetName(string nameInput)
+{
+	name = nameInput;
+}
+
+string Humans::GetName()
+{
+	return name;
+}

@@ -9,3 +9,13 @@
 #include <string>
 #include "Cart.h"
 using namespace std;
+
+Cart::Cart()
+{
+	money = 1000;
+	food = 0;
+	ammo = 0;
+	parts = 0;
+	oxen = 0;
+	healthKits = 0;
+}
