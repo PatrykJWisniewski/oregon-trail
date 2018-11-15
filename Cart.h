@@ -11,7 +11,7 @@ using namespace std;
 class Cart
 {
 private:
-	int money;
+	float money;
 	int food;
 	int ammo;
 	int parts;
@@ -20,6 +20,7 @@ private:
 
 public:
 	Cart();
+	float GetMoney();
 };
 
 #endif

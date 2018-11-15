@@ -21,7 +21,7 @@ int main()
 	int year;
 	int month;
 	int day;
-	int distanceTravled;
+	int distanceTravled = 0;
 	string nameInput;
 
 	cout << "THIS PROGRAM SIMULATES A TRIP OVER THE OREGON TRAIL FROM INDEPENDENCE, MISSOURI TO OREGON CITY, OREGON IN 1847." << endl;
@@ -30,6 +30,7 @@ int main()
 	cout << "Before you begin your jorney we would like to document some basic information about you and your family." << endl;
 	cout << "If you could be so kind as to please tell us your name." << endl;
 
+	cout << "Name : ";
 	cin >> nameInput;
 	HUMANS[0].SetName(nameInput);
 
@@ -37,25 +38,16 @@ int main()
 
 	for (int i = 1; i < 5; i++)
 	{
+		cout << i << " : ";
 		cin >> nameInput;
 		HUMANS[i].SetName(nameInput);
 	}
 
-	cout << endl << "You, ";
-	for (int j = 1; j < 5; j++)
-	{
-		if (j == 4)
-		{
-			cout << "and ";
-			cout << HUMANS[j].GetName();
-		}
-		else
-		{
-			cout << HUMANS[j].GetName() << ", ";
-		}
-	}
+	cout << endl << "You are starting at mile: 0." << endl;
+	cout << "There are 2040 that you must travel to reach your destination." << endl;
+	cout << "Before the start of your trip, you can visit the store and buy supplies : food, oxen, bullets and wagon parts." << endl;
+	MILESTONES[0].PromptUser(0, CART.GetMoney());
 
-	cout << endl << "Once you recorded your information you headed off the store in order to start your jorney" << endl;
 	cin >> year;
 	
 }

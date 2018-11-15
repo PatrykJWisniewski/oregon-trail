@@ -19,3 +19,8 @@ Cart::Cart()
 	oxen = 0;
 	healthKits = 0;
 }
+
+float Cart::GetMoney()
+{
+	return money;
+}

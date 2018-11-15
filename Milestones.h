@@ -11,9 +11,17 @@ using namespace std;
 class Milestones
 {
 private:
+	float priceIncrease;
+	float oxenCost;
+	float foodCost;
+	float ammoCost;
+	float partCost;
+	float medCost;
 
 public:
 	Milestones();
+	void PromptUser(int distance, int money);
+	void VisitStore(int distance, int money);
 };
 
 #endif
