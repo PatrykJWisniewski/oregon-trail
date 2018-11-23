@@ -19,8 +19,8 @@ public:
 	Humans();
 	void SetName(string nameInput);
 	string GetName();
+	int randomNumbers(int min, int max);
 	int Rest(int days);
-	void Countine();
 	void Hunt();
 	void Puzzel();
 };
