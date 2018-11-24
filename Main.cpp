@@ -174,7 +174,7 @@ void ReadMilestones(Milestones mileStones[])
 				if (stoi(milestoneInfo[1]) == 0)
 				{
 					//Increse the price of items
-					mileStones[mileStoneNum].SetPriceIncrease(.25*(mileStoneNum - 4));
+					mileStones[mileStoneNum].SetPriceIncrease((.25*(mileStoneNum - 4))+1);
 				}
 				lineNum = 0;
 				mileStoneNum++;
@@ -221,7 +221,7 @@ bool CheckIfThePlayerLost(Cart cart)
 
 	if (endGame == true)
 	{
-		cout << "Sorry, you did not reach Oregon City." << endl;
+		cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
 	}
 
 	return endGame;
@@ -230,7 +230,7 @@ bool CheckIfThePlayerLost(Cart cart)
 //Prints out the players current status
 void PrintOutPlayerStatus(Cart cart, int dateNums[], int distance, Milestones nextM)
 {
-	cout << "----CURRENT STATUS----" << endl;
+	cout << endl << "----CURRENT STATUS----" << endl;
 	cout << "Current Date : " << dateNums[0] << "-" << dateNums[1] << "-" << dateNums[2] << endl;
 	cout << "Miles Travelled : " << distance << endl;
 	cout << "Next Landmark : " << nextM.GetDistance() - distance << endl;
@@ -252,6 +252,7 @@ int main()
 	int randomNum;
 	string nameInput;
 	char charInput;
+	bool validInput = false;
 	srand(time(0));
 
 	cout << "THIS PROGRAM SIMULATES A TRIP OVER THE OREGON TRAIL FROM INDEPENDENCE, MISSOURI TO OREGON CITY, OREGON IN 1847." << endl;
@@ -277,7 +278,7 @@ int main()
 	cout << endl << "You are starting at mile: 0." << endl;
 	cout << "There are 2040 that you must travel to reach your destination." << endl;
 	cout << "Before the start of your trip, you can visit the store and buy supplies : food, oxen, bullets and wagon parts." << endl;
-	CART = MILESTONES[0].PromptUser(0, CART); //Will bring up the starting store
+	CART = MILESTONES[0].PromptUser(0, CART, HUMANS); //Will bring up the starting store
 
 	//Asks the player if they are happy with the date or would like to change it
 	cout << "Your departure date curently is : 1847-03-28. Would you like to change it?" << endl;
@@ -343,7 +344,7 @@ int main()
 				//For each player in the game
 				for (int i = 0; i < 5; i++)
 				{
-					CART.SetFood(CART.GetFood() - HUMANS[i].Rest(randomNum)); //Subtracts food from the players total for each human that is alive
+					CART.SetFood(CART.GetFood() - HUMANS[i].Rest(randomNum, 3)); //Subtracts food from the players total for each human that is alive
 				}
 			
 				MoveDateForward(dateNums, randomNum); //Moves the date forward by the random number
@@ -352,26 +353,85 @@ int main()
 				stop = CheckIfThePlayerLost(CART); //Checks to see if the player has lost
 				break;
 			case 2:
+				//For each player in the game
+				for (int i = 0; i < 5; i++)
+				{
+					CART.SetFood(CART.GetFood() - HUMANS[i].Rest(14, 3)); //Subtracts food from the players total for each human that is alive
+				}
+
 				//If the player has oxen...
 				if (CART.GetOxen() != 0)
 				{
 					//Add to total distance
 					distanceTravled += (HUMANS[0].randomNumbers(1, 7)*CART.GetOxen()) + 70;
-				}
-
-				//For each player in the game
-				for (int i = 0; i < 5; i++)
-				{
-					CART.SetFood(CART.GetFood() - HUMANS[i].Rest(14)); //Subtracts food from the players total for each human that is alive
+					if (distanceTravled >= nextMilestone.GetDistance())
+					{
+						distanceTravled = nextMilestone.GetDistance();
+						CART = nextMilestone.PromptUser(distanceTravled, CART, HUMANS);
+						Milestones nextMilestone = FindClosestMilestone(MILESTONES, 11, distanceTravled); //Finds the closet milestone
+					}
 				}
 
 				MoveDateForward(dateNums, 14); //Moves the date forward by 2 weeks
-				cout << "You have chosen to push forward for two more weeks" << endl;
+				cout << "You pushed forward for two more weeks" << endl;
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
 				stop = CheckIfThePlayerLost(CART); //Checks to see if the player has lost
 				break;
 			case 3:
-				HUMANS[0].Hunt();
+				CART = HUMANS[0].Hunt(CART);
+				cout << "You now have " << CART.GetFood() << " pounds of food" << endl;
+
+				//Asks the user how well they want to eat untill they give a valid answer
+				while (validInput == false)
+				{
+					cout << endl << "How well would you like to eat?" << endl;
+					cout << "1. Poorly" << endl;
+					cout << "2. Moderately" << endl;
+					cout << "3. Well" << endl;
+					cin >> charInput;
+
+					switch (charInput)
+					{
+					case '1':
+						validInput = true;
+						//For each player in the game
+						for (int i = 0; i < 5; i++)
+						{
+							CART.SetFood(CART.GetFood() - HUMANS[i].Rest(1, 2)); //Subtracts food from the players total for each human that is alive
+						}
+						break;
+					case '2':
+						validInput = true;
+						//For each player in the game
+						for (int i = 0; i < 5; i++)
+						{
+							CART.SetFood(CART.GetFood() - HUMANS[i].Rest(1, 3)); //Subtracts food from the players total for each human that is alive
+						}
+						break;
+					case '3':
+						validInput = true;
+						//For each player in the game
+						for (int i = 0; i < 5; i++)
+						{
+							CART.SetFood(CART.GetFood() - HUMANS[i].Rest(1, 5)); //Subtracts food from the players total for each human that is alive
+						}
+						break;
+					default:
+						cout << "Please enter a valid input" << endl;
+					}
+				}
+
+				//Checks if the player is over the max food limit
+				if (CART.GetFood() > 1000)
+				{
+					cout << "Unfortunately your cart could not hold more then 1000 pounds of food so you had to leave some behind." << endl;
+					CART.SetFood(1000);
+				}
+
+				MoveDateForward(dateNums, 1); //Moves the date forward by 1 day
+				cout << "You hunted for one day." << endl;
+				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
+				stop = CheckIfThePlayerLost(CART); //Checks to see if the player has lost
 				break;
 			case 4:
 				cout << "Unfortunately you had to end your trip to Oregon, but who knows what the future will hold." << endl;
@@ -384,5 +444,5 @@ int main()
 		}
 	}
 
-	cin >> charInput;
+	cin >> charInput; //Test code
 }

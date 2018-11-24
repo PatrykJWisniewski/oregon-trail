@@ -5,6 +5,7 @@
 
 #ifndef HUMANS_H
 #define HUMANS_H
+#include "Cart.h"
 #include <string>
 using namespace std;
 
@@ -19,10 +20,11 @@ public:
 	Humans();
 	void SetName(string nameInput);
 	string GetName();
+	bool GetAlive();
 	int randomNumbers(int min, int max);
-	int Rest(int days);
-	void Hunt();
-	void Puzzel();
+	int Rest(int days, int food);
+	Cart Hunt(Cart cart);
+	bool Puzzel();
 };
 
 #endif

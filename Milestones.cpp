@@ -9,6 +9,7 @@
 #include <string>
 #include "Milestones.h"
 #include "Cart.h"
+#include "Humans.h"
 using namespace std;
 
 Milestones::Milestones()
@@ -24,32 +25,127 @@ Milestones::Milestones()
 	medCost = 25;
 }
 
-Cart Milestones::PromptUser(int distance, Cart cart)
+Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 {
 	char input;
 	bool stop = false;
-	cout << "Would you like to visit the store?" << endl;
 
-	while (stop == false)
+	//If the player has reached a river
+	if (depth > 0)
 	{
-		cout << "Y / N" << endl;
-		cin >> input;
-
-		switch (input)
+		cout << "You have reached the " << name << endl;
+		cout << "1. Cross the river" << endl;
+		cout << "2. Rest" << endl;
+		while (stop == false)
 		{
-		case 'Y':
-		case 'y':
-			stop = true;
-			return VisitStore(distance, cart);
-			break;
-		case 'N':
-		case 'n':
-			stop = true;
-			return cart;
-			break;
-		default:
-			cout << "Please enter a valid input" << endl;
+			cin >> input;
+
+			switch (input)
+			{
+			case '1':
+				//If the depth of the river is greater then 3 feet...
+				if (depth > 3)
+				{
+					//Charge the player 10$ per person
+					for (int i = 0; i < 5; i++)
+					{
+						if (humans[i].GetAlive() == true)
+						{
+							cart.SetMoney(cart.GetMoney() - 10);
+						}
+					}
+
+					cout << "You crossed the river by ferry paying $10 per person" << endl;
+				}
+				//If not then allow the player to cross without paying a fee
+				else
+				{
+					cout << "The river proved shallow enouth to cross on your own so you pushed on with the cart in tow" << endl;
+				}
+				stop = true;
+				return cart;
+				break;
+			case '2':
+				//For each player in the game
+				for (int i = 0; i < 5; i++)
+				{
+					cart.SetFood(cart.GetFood() - humans[i].Rest(1, 3)); //Subtracts food from the players total for each human that is alive
+					if (cart.GetFood() <= 0)
+					{
+						return cart;
+					}
+				}
+				break;
+			default:
+				cout << "Please enter a valid input" << endl;
+			}
 		}
+	}
+	else
+	{
+		//If the user is visting the store for the first time during the start of the game
+		if (distance == 0)
+		{
+			cout << "Would you like to visit the store?" << endl;
+
+			while (stop == false)
+			{
+				cout << "Y / N" << endl;
+				cin >> input;
+
+				switch (input)
+				{
+				case 'Y':
+				case 'y':
+					stop = true;
+					return VisitStore(distance, cart);
+					break;
+				case 'N':
+				case 'n':
+					stop = true;
+					return cart;
+					break;
+				default:
+					cout << "Please enter a valid input" << endl;
+				}
+			}
+		}
+		//If the player has reached a fort
+		else
+		{
+			cout << "You have reached " << name << endl;
+			cout << "1. Visit the store" << endl;
+			cout << "2. Rest" << endl;
+			cout << "3. Continue" << endl;
+			while (stop == false)
+			{
+				cin >> input;
+
+				switch (input)
+				{
+				case '1':
+					VisitStore(distance, cart);
+					break;
+				case '2':
+					//For each player in the game
+					for (int i = 0; i < 5; i++)
+					{
+						cart.SetFood(cart.GetFood() - humans[i].Rest(1, 3)); //Subtracts food from the players total for each human that is alive
+						if (cart.GetFood() <= 0)
+						{
+							return cart;
+						}
+					}
+					break;
+				case '3':
+					stop = true;
+					cout << "You leave the fort ready to push onward" << endl;
+				default:
+					cout << "Please enter a valid input" << endl;
+				}
+			}
+		}
+		return cart;
 	}
 }
 

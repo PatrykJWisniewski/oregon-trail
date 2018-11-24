@@ -7,6 +7,7 @@
 #define MILESTONES_H
 #include <string>
 #include "Cart.h"
+#include "Humans.h"
 using namespace std;
 
 class Milestones
@@ -24,7 +25,7 @@ private:
 
 public:
 	Milestones();
-	Cart PromptUser(int distance, Cart cart);
+	Cart PromptUser(int distance, Cart cart, Humans humans[]);
 	Cart VisitStore(int distance, Cart cart);
 	int ConvertInput(string input);
 	void SetPriceIncrease(float increase);
