@@ -6,19 +6,24 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 #include <string>
+#include "Cart.h"
+#include "Humans.h"
 using namespace std;
 
 class Events
 {
 private:
-	//Priavte varaibles may not be needed so im leaving this for blank for now
+	bool misfortune;
+	bool attacked;
 
 public:
-	Events();
-	void Run();
-	void Attack();
-	void Surrender();
-	void Puzzel();
+	Events(int distance);
+	int randomNumbers(int min, int max);
+	Cart Misfortune(Cart cart, Humans humans[], int dateNums[]);
+	Cart Raiders(Cart cart);
+	bool GetMisfortune();
+	bool GetAttacked();
+	bool Puzzel();
 };
 
 #endif

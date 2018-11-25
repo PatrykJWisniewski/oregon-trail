@@ -52,5 +52,8 @@
     <Text Include="fort-milestones.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="results.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

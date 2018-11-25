@@ -1,0 +1,4 @@
+Leader: f
+Miles Travled: 0
+Food Remaning: -15
+Cash Remaning: 1200

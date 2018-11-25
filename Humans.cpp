@@ -33,6 +33,11 @@ bool Humans::GetAlive()
 	return alive;
 }
 
+void Humans::SetDead()
+{
+	alive = false;
+}
+
 int Humans::randomNumbers(int min, int max)
 {
 	return (rand() % (max - min + 1)) + min;
@@ -43,6 +48,10 @@ int Humans::Rest(int days, int food)
 	if (alive == true)
 	{
 		return food * days;
+	}
+	else
+	{
+		return 0;
 	}
 }
 
@@ -281,5 +290,11 @@ bool Humans::Puzzel()
 			cout << "You won!" << endl;
 			return true;
 		}
+	}
+
+	if (inputNum != randomNum)
+	{
+		cout << "You lost" << endl;
+		return false;
 	}
 }

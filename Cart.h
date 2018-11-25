@@ -20,6 +20,7 @@ private:
 
 public:
 	Cart();
+	void MoveDateForward(int dateNums[], int days);
 	void SetMoney(float newMoney);
 	float GetMoney();
 	void SetOxen(int newOxen);

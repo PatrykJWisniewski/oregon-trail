@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="fort-milestones.txt" />
+    <Text Include="results.txt" />
     <Text Include="river-milestones.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

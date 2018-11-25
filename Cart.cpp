@@ -21,6 +21,44 @@ Cart::Cart()
 	healthKits = 0;
 }
 
+void Cart::MoveDateForward(int dateNums[], int days)
+{
+	switch (dateNums[1])
+	{
+	case 3:
+	case 5:
+	case 7:
+	case 8:
+	case 10:
+		for (int i = 0; i < days; i++)
+		{
+			dateNums[2]++;
+			if (dateNums[2] == 32)
+			{
+				dateNums[1]++;
+				dateNums[2] = 1;
+			}
+		}
+		break;
+
+	case 4:
+	case 6:
+	case 9:
+	case 11:
+		for (int i = 0; i < days; i++)
+		{
+			dateNums[2]++;
+			if (dateNums[2] == 31)
+			{
+				dateNums[1]++;
+				dateNums[2] = 1;
+			}
+		}
+		break;
+	}
+}
+
+
 void Cart::SetMoney(float newMoney)
 {
 	money = newMoney;

@@ -21,6 +21,7 @@ public:
 	void SetName(string nameInput);
 	string GetName();
 	bool GetAlive();
+	void SetDead();
 	int randomNumbers(int min, int max);
 	int Rest(int days, int food);
 	Cart Hunt(Cart cart);
