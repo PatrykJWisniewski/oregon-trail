@@ -7,10 +7,12 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <vector>
 #include "Milestones.h"
 #include "Events.h"
 #include "Humans.h"
 #include "Cart.h"
+#include "Results.h"
 using namespace std;
 
 int split(string str, char c, string array[], int size)
@@ -194,9 +196,71 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 		endGame = true;
 	}
 
-
 	if (endGame == true)
 	{
+		vector<Results> playerResualts; //A vector that has an array containg a players stats
+		ifstream reFile;
+		reFile.open("results.txt"); //Opens the resuats file
+
+		string line;
+		string playerInfo[2]; //Sets up an array that holds the string and int of each stat
+
+		//Goes throuth each line in the results file
+		int lineNum = 0;
+		Results newResults;
+		while (getline(reFile, line))
+		{
+			if (lineNum == 4)
+			{
+				lineNum = 0;
+				playerResualts.push_back(newResults);
+			}
+			else
+			{
+				switch (lineNum)
+				{
+				case 0:
+					newResults.SetName(line);
+					break;
+
+				case 1:
+					split(line, ':', playerInfo, 2);
+					newResults.SetMiles(stoi(playerInfo[1]));
+					break;
+
+				case 2:
+					split(line, ':', playerInfo, 2);
+					newResults.SetFood(stoi(playerInfo[1]));
+					break;
+
+				case 3:
+					split(line, ':', playerInfo, 2);
+					newResults.SetMoney(stoi(playerInfo[1]));
+					break;
+				}
+				lineNum++;
+			}
+		}
+
+		for (int i = 0; i < playerResualts.size(); i++)
+		{
+			playerResualts[i].FindScore();
+		}
+
+		//Sorts all the players by their hidden score
+		for (int j = 0; j < playerResualts.size(); j++)
+		{
+			for (int k = 0; k < playerResualts.size(); k++)
+			{
+				if (playerResualts[k].GetScore() > playerResualts[j].GetScore())
+				{
+					playerResualts.insert(playerResualts.begin()+j, playerResualts[k]);
+					playerResualts.erase(playerResualts.begin() + k);
+				}
+			}
+		}
+
+		/*
 		//Prints out final stats of the game
 		cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
 		cout << "Leader: " << leader.GetName() << endl;
@@ -211,6 +275,7 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 		myFile << "Miles Travled: " << distance << endl;
 		myFile << "Food Remaning: " << cart.GetFood() << endl;
 		myFile << "Cash Remaning: " << cart.GetMoney() << endl;
+		myFile << "----" << cart.GetMoney() << endl;*/
 	}
 
 	return endGame;
