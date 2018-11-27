@@ -114,11 +114,13 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 		else
 		{
 			cout << "You have reached " << name << endl;
-			cout << "1. Visit the store" << endl;
-			cout << "2. Rest" << endl;
-			cout << "3. Continue" << endl;
+
 			while (stop == false)
 			{
+				cout << "1. Visit the store" << endl;
+				cout << "2. Rest" << endl;
+				cout << "3. Continue" << endl;
+
 				cin >> input;
 
 				switch (input)
@@ -136,6 +138,7 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 							return cart;
 						}
 					}
+					cout<< endl << "You rested for one day" << endl << endl;
 					break;
 				case '3':
 					stop = true;
@@ -219,7 +222,7 @@ Cart Milestones::VisitStore(int distance, Cart cart)
 						cout << "You did not choose a valid amount of yokes" << endl;
 						cout << "Current Bill: " << currentBill << endl;
 					}
-					else if (cart.GetOxen() + (inputNum * 2) > 10)
+					else if (cart.GetOxen() + (inputNum * 2) > 9 && distance > 0)
 					{
 						cout << "You can not buy any more yokes" << endl;
 						cout << "Current Bill: " << currentBill << endl;

@@ -9,12 +9,54 @@
 #include <string>
 #include "Humans.h"
 #include "Cart.h"
+#include "Animal.h"
 using namespace std;
 
 Humans::Humans()
 {
 	name = "";
 	alive = true;
+
+	ifstream myFile;
+	myFile.open("animalinfo.txt");
+	string info[5];
+	string line;
+
+	int i = 0;
+	while (getline(myFile, line))
+	{
+		split(line, ' ', info, 5);
+		animals[i].SetName(info[0]);
+		animals[i].SetProb(stoi(info[1]));
+		animals[i].SetMin(stoi(info[2]));
+		animals[i].SetMax(stoi(info[3]));
+		animals[i].SetCost(stoi(info[4]));
+		i++;
+	}
+}
+
+int Humans::split(string str, char c, string array[], int size)
+{
+	if (str.length() == 0) {
+		return 0;
+	}
+	string word = "";
+	int count = 0;
+	str = str + c;
+	for (int i = 0; i < str.length(); i++)
+	{
+		if (str[i] == c)
+		{
+			if (word.length() == 0)
+				continue;
+			array[count++] = word;
+			word = "";
+		}
+		else {
+			word = word + str[i];
+		}
+	}
+	return count;
 }
 
 void Humans::SetName(string nameInput)
@@ -86,163 +128,49 @@ bool AskToHunt()
 
 Cart Humans::Hunt(Cart cart)
 {
-	//If the player encounters a rabbit
-	if (randomNumbers(1, 100) > 50)
+	bool nothingFound = true;
+
+	//Checks if the user encountered each type of animal
+	for (int i = 0; i < 5; i++)
 	{
-		cout << "You encountered a rabbit. Would you like to hunt it?" << endl;
-		//If the player choose to hunt
-		if (AskToHunt() == true)
+		//If the player encounters an animal
+		if (randomNumbers(1, 100) > animals[i].GetProb())
 		{
-			//If the player has less then 10 bullets
-			if (cart.GetAmmo() < 10)
+			cout << "You encountered a " << animals[i].GetName() << " . Would you like to hunt it?" << endl;
+			//If the player choose to hunt
+			if (AskToHunt() == true)
 			{
-				cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
-			}
-			else
-			{
-				//If the player beat the puzzel...
-				if (Puzzel() == true)
+				//If the player has less then 10 bullets
+				if (cart.GetAmmo() < 10)
 				{
-					//Add food and remove ammo
-					cart.SetFood(cart.GetFood() + 2);
-					cart.SetAmmo(cart.GetAmmo() - 10);
-					cout << "The rabbit was worth 2 pounds of food, however it did take some ammo to kill." << endl;
+					cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
 				}
-				//If the player failed the puzzel
 				else
 				{
-					cout << "The hunt was unsuccessful." << endl;
+					//If the player beat the puzzel...
+					if (Puzzel() == true)
+					{
+						//Add food and remove ammo
+						randomNum = randomNumbers(animals[i].GetMin(), animals[i].GetMax()); //Picks a random number for the animals food output
+						cart.SetFood(cart.GetFood() + randomNum);
+						cart.SetAmmo(cart.GetAmmo() - animals[i].GetCost());
+						cout << "The  " << animals[i].GetName() << "  was worth " << randomNum << " pounds of food, however it did take some ammo to kill." << endl;
+					}
+					//If the player failed the puzzel
+					else
+					{
+						cout << "The hunt was unsuccessful." << endl;
+					}
 				}
 			}
+
+			nothingFound = false;
 		}
 	}
 
-	//If the player encounters a fox
-	if (randomNumbers(1, 100) > 75)
+	if (nothingFound == true)
 	{
-		cout << "You encountered a fox. Would you like to hunt it?" << endl;
-		//If the player choose to hunt
-		if (AskToHunt() == true)
-		{
-			//If the player has less then 10 bullets
-			if (cart.GetAmmo() < 10)
-			{
-				cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
-			}
-			else
-			{
-				//If the player beat the puzzel...
-				if (Puzzel() == true)
-				{
-					//Add food and remove ammo
-					cart.SetFood(cart.GetFood() + 5);
-					cart.SetAmmo(cart.GetAmmo() - 8);
-					cout << "The fox was worth 5 pounds of food, however it did take some ammo to kill." << endl;
-				}
-				//If the player failed the puzzel
-				else
-				{
-					cout << "The hunt was unsuccessful." << endl;
-				}
-			}
-		}
-	}
-
-	//If the player encounters a deer
-	if (randomNumbers(1, 100) > 85)
-	{
-		cout << "You encountered a deer. Would you like to hunt it?" << endl;
-		//If the player choose to hunt
-		if (AskToHunt() == true)
-		{
-			//If the player has less then 10 bullets
-			if (cart.GetAmmo() < 10)
-			{
-				cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
-			}
-			else
-			{
-				//If the player beat the puzzel...
-				if (Puzzel() == true)
-				{
-					//Add food and remove ammo
-					randomNum = randomNumbers(30, 55); //Picks a random number for the animals food output
-					cart.SetFood(cart.GetFood() + randomNum);
-					cart.SetAmmo(cart.GetAmmo() - 5
-);
-					cout << "The deer was worth " << randomNum << " pounds of food, however it did take some ammo to kill." << endl;
-				}
-				//If the player failed the puzzel
-				else
-				{
-					cout << "The hunt was unsuccessful." << endl;
-				}
-			}
-		}
-	}
-
-	//If the player encounters a bear
-	if (randomNumbers(1, 100) > 93)
-	{
-		cout << "You encountered a bear. Would you like to hunt it?" << endl;
-		//If the player choose to hunt
-		if (AskToHunt() == true)
-		{
-			//If the player has less then 10 bullets
-			if (cart.GetAmmo() < 10)
-			{
-				cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
-			}
-			else
-			{
-				//If the player beat the puzzel...
-				if (Puzzel() == true)
-				{
-					//Add food and remove ammo
-					randomNum = randomNumbers(100, 350); //Picks a random number for the animals food output
-					cart.SetFood(cart.GetFood() + randomNum);
-					cart.SetAmmo(cart.GetAmmo() - 10);
-					cout << "The bear was worth " << randomNum << " pounds of food, however it did take some ammo to kill." << endl;
-				}
-				//If the player failed the puzzel
-				else
-				{
-					cout << "The hunt was unsuccessful." << endl;
-				}
-			}
-		}
-	}
-
-	//If the player encounters a moose
-	if (randomNumbers(1, 100) > 95)
-	{
-		cout << "You encountered a moose. Would you like to hunt it?" << endl;
-		//If the player choose to hunt
-		if (AskToHunt() == true)
-		{
-			//If the player has less then 10 bullets
-			if (cart.GetAmmo() < 10)
-			{
-				cout << "Due to your lack of bullets the hunt is unsuccessful." << endl;
-			}
-			else
-			{
-				//If the player beat the puzzel...
-				if (Puzzel() == true)
-				{
-					//Add food and remove ammo
-					randomNum = randomNumbers(300, 600); //Picks a random number for the animals food output
-					cart.SetFood(cart.GetFood() + randomNum);
-					cart.SetAmmo(cart.GetAmmo() - 12);
-					cout << "The moose was worth " << randomNum << " pounds of food, however it did take some ammo to kill." << endl;
-				}
-				//If the player failed the puzzel
-				else
-				{
-					cout << "The hunt was unsuccessful." << endl;
-				}
-			}
-		}
+		cout << "The hunt was unsuccessful." << endl;
 	}
 
 	//If the player used more ammo then they had

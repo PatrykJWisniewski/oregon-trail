@@ -127,8 +127,11 @@ Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 	}
 	else if (randomNum == 2)
 	{
-		cart.SetOxen(cart.GetOxen() - 1);
-		cout << endl << "Oh no! One of the oxen has died. You have " << cart.GetOxen() << " oxen left" << endl;
+		if (cart.GetOxen() > 0)
+		{
+			cart.SetOxen(cart.GetOxen() - 1);
+			cout << endl << "Oh no! One of the oxen has died. You have " << cart.GetOxen() << " oxen left" << endl;
+		}
 	}
 	else if (randomNum == 3)
 	{
@@ -160,8 +163,16 @@ Cart Events::Raiders(Cart cart)
 		case '1':
 			cart.SetOxen(cart.GetOxen() - 1);
 			cart.SetFood(cart.GetFood() - 10);
-			cart.SetParts(cart.GetParts() - 1);
-			cout << "You escaped with your lives, but in the chaos you left behind 1 ox, 10 pounds of food, and a wagon part." << endl;
+			//Checks to see that player has wagon parts so that his total dosen't go into the negatives when running away.
+			if (cart.GetParts() > 0)
+			{
+				cart.SetParts(cart.GetParts() - 1);
+				cout << "You escaped with your lives, but in the chaos you left behind 1 ox, 10 pounds of food, and a wagon part." << endl;
+			}
+			else
+			{
+				cout << "You escaped with your lives, but in the chaos you left behind 1 ox, and 10 pounds of food." << endl;
+			}
 			stop = true;
 			break;
 

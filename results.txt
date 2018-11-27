@@ -1,21 +1,30 @@
-Leader: f
+Leader: g
+Miles Travled: 4
+Food Remaning: -210
+Cash Remaning: 900
+----
+Leader: g
+Miles Travled: 3
+Food Remaning: -210
+Cash Remaning: 900
+----
+Leader: g
+Miles Travled: 2
+Food Remaning: -210
+Cash Remaning: 900
+----
+Leader: g
+Miles Travled: 1
+Food Remaning: -210
+Cash Remaning: 900
+----
+Leader: g
 Miles Travled: 0
-Food Remaning: -45
-Cash Remaning: 1200
+Food Remaning: -10
+Cash Remaning: 900
 ----
-Leader: f
-Miles Travled: 100
-Food Remaning: -45
-Cash Remaning: 1200
+Leader: g
+Miles Travled: 0
+Food Remaning: -210
+Cash Remaning: 900
 ----
-Leader: f
-Miles Travled: 2000
-Food Remaning: -45
-Cash Remaning: 1200
-----
-Leader: f
-Miles Travled: 674
-Food Remaning: -45
-Cash Remaning: 1200
-----
-

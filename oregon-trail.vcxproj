@@ -132,6 +132,7 @@
     <ClInclude Include="Results.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="animalinfo.txt" />
     <Text Include="fort-milestones.txt" />
     <Text Include="results.txt" />
     <Text Include="river-milestones.txt" />

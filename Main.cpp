@@ -168,32 +168,42 @@ Milestones FindClosestMilestone(Milestones milestones[], int length, int travled
 	return milestones[index];
 }
 
-bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
+bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance)
 {
 	bool endGame = false;
 
-	if (cart.GetFood() <= 0)
+	cout << endl;
+
+	if (distance == 2040)
 	{
-		cout << "The player has ran out of food." << endl;
+		cout << "CONGRATS YOU MADE IT TO OREGON CITY!!!" << endl;
 		endGame = true;
 	}
-
-	if (cart.GetOxen() == 0)
+	else
 	{
-		cout << "The player has ran out of oxen." << endl;
-		endGame = true;
-	}
+		if (cart.GetFood() <= 0)
+		{
+			cout << "The player has ran out of food." << endl;
+			endGame = true;
+		}
 
-	if (cart.GetParts() == -1)
-	{
-		cout << "Your wagon broke and you have no spare parts." << endl;
-		endGame = true;
-	}
+		if (cart.GetOxen() == 0)
+		{
+			cout << "The player has ran out of oxen." << endl;
+			endGame = true;
+		}
 
-	if (leader.GetAlive() == false)
-	{
-		cout << "Your leader has died." << endl;
-		endGame = true;
+		if (cart.GetParts() == -1)
+		{
+			cout << "Your wagon broke and you have no spare parts." << endl;
+			endGame = true;
+		}
+
+		if (leader.GetAlive() == false)
+		{
+			cout << "Your leader has died." << endl;
+			endGame = true;
+		}
 	}
 
 	if (endGame == true)
@@ -208,10 +218,12 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 		//Goes throuth each line in the results file
 		int lineNum = 0;
 		Results newResults;
+		//Gets all the information for each player and fills a newResults class in order to compleate it
 		while (getline(reFile, line))
 		{
 			if (lineNum == 4)
 			{
+				//Once a players info has been read then it skips a line, resets the line count num, and adds the completly read player to a vector
 				lineNum = 0;
 				playerResualts.push_back(newResults);
 			}
@@ -219,20 +231,24 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 			{
 				switch (lineNum)
 				{
+				//First line of a players info is their name
 				case 0:
 					newResults.SetName(line);
 					break;
 
+				//Second line of a players info is their distance travled
 				case 1:
 					split(line, ':', playerInfo, 2);
 					newResults.SetMiles(stoi(playerInfo[1]));
 					break;
 
+				//Third line of a players info is food left
 				case 2:
 					split(line, ':', playerInfo, 2);
 					newResults.SetFood(stoi(playerInfo[1]));
 					break;
 
+				//Forth line of a players info is money left
 				case 3:
 					split(line, ':', playerInfo, 2);
 					newResults.SetMoney(stoi(playerInfo[1]));
@@ -242,28 +258,40 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 			}
 		}
 
+		//Adds the current players resaults too the pool
+		newResults.SetName("Leader: " + leader.GetName());
+		newResults.SetMiles(distance);
+		newResults.SetFood(cart.GetFood());
+		newResults.SetMoney(cart.GetMoney());
+		playerResualts.push_back(newResults);
+
+		//Finds the hidden score of each player
 		for (int i = 0; i < playerResualts.size(); i++)
 		{
 			playerResualts[i].FindScore();
 		}
 
 		//Sorts all the players by their hidden score
+		int timesSorted = 0;
 		for (int j = 0; j < playerResualts.size(); j++)
 		{
-			for (int k = 0; k < playerResualts.size(); k++)
+			for (int k = 0; k < playerResualts.size() - timesSorted; k++)
 			{
-				if (playerResualts[k].GetScore() > playerResualts[j].GetScore())
+				if (playerResualts[k + timesSorted].GetScore() >= playerResualts[timesSorted].GetScore())
 				{
-					playerResualts.insert(playerResualts.begin()+j, playerResualts[k]);
-					playerResualts.erase(playerResualts.begin() + k);
+					playerResualts.insert(playerResualts.begin() + j, playerResualts[k + timesSorted]);
+					playerResualts.erase(playerResualts.begin() + k + timesSorted + 1);
 				}
 			}
+			timesSorted++;
 		}
 
-		/*
 		//Prints out final stats of the game
-		cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
-		cout << "Leader: " << leader.GetName() << endl;
+		if (distance < 2040) //If the player lost
+		{
+			cout << endl << "YOU HAVE DIED OF DYSENTERY!" << endl;
+		}
+		cout << endl << "Leader: " << leader.GetName() << endl;
 		cout << "Miles Travled: " << distance << endl;
 		cout << "Food Remaning: " << cart.GetFood() << endl;
 		cout << "Cash Remaning: " << cart.GetMoney() << endl;
@@ -271,11 +299,14 @@ bool CheckIfThePlayerLost(Cart cart, Humans leader, int distance)
 		//Saves final stats of the game too a text file
 		ofstream myFile;
 		myFile.open("results.txt"); // Opens the file
-		myFile << "Leader: " << leader.GetName() << endl;
-		myFile << "Miles Travled: " << distance << endl;
-		myFile << "Food Remaning: " << cart.GetFood() << endl;
-		myFile << "Cash Remaning: " << cart.GetMoney() << endl;
-		myFile << "----" << cart.GetMoney() << endl;*/
+		for (int i = 0; i < playerResualts.size(); i++)
+		{
+			myFile << playerResualts[i].GetName() << endl;
+			myFile << "Miles Travled: " << playerResualts[i].GetMiles() << endl;
+			myFile << "Food Remaning: " << playerResualts[i].GetFood() << endl;
+			myFile << "Cash Remaning: " << playerResualts[i].GetMoney() << endl;
+			myFile << "----" << endl;
+		}
 	}
 
 	return endGame;
@@ -348,8 +379,6 @@ int main()
 		case 'y':
 			stop = true;
 			ChangeDate(dateNums);
-			cout << "The final date of departure is : " << dateNums[0] << " - " << dateNums[1] << " - " << dateNums[2] << endl;
-			cout << "You must reach the Oregon City by 1847-11-30" << endl;
 			break;
 		case 'N':
 		case 'n':
@@ -404,12 +433,19 @@ int main()
 			
 				CART.MoveDateForward(dateNums, randomNum); //Moves the date forward by the random number
 				cout << "You have chosen to rest for " << randomNum << " days." << endl;
+
+				//Checks if the player has a misfortune and then checks for raiders
 				if (newEvent.GetMisfortune() == true)
 				{
 					CART = newEvent.Misfortune(CART, HUMANS, dateNums);
 				}
+				if (newEvent.GetAttacked() == true)
+				{
+					CART = newEvent.Raiders(CART);
+				}
+
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLost(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
 				break;
 			case 2:
 				//For each player in the game
@@ -423,24 +459,41 @@ int main()
 				{
 					//Add to total distance
 					distanceTravled += (HUMANS[0].randomNumbers(1, 7)*CART.GetOxen()) + 70;
+					//If the player reached oregon
+					if (distanceTravled > 2040)
+					{
+						distanceTravled = 2040;
+					}
 					if (distanceTravled >= nextMilestone.GetDistance())
 					{
 						distanceTravled = nextMilestone.GetDistance();
 						CART = nextMilestone.PromptUser(distanceTravled, CART, HUMANS);
-						Milestones nextMilestone = FindClosestMilestone(MILESTONES, 11, distanceTravled); //Finds the closet milestone
+						nextMilestone = FindClosestMilestone(MILESTONES, 11, distanceTravled); //Finds the closet milestone
 					}
 				}
 
 				CART.MoveDateForward(dateNums, 14); //Moves the date forward by 2 weeks
 				cout << "You pushed forward for two more weeks" << endl;
+
+				//Checks if the player has a misfortune and then checks for raiders
+				if (newEvent.GetMisfortune() == true)
+				{
+					CART = newEvent.Misfortune(CART, HUMANS, dateNums);
+				}
+				if (newEvent.GetAttacked() == true)
+				{
+					CART = newEvent.Raiders(CART);
+				}
+
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLost(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
 				break;
 			case 3:
 				CART = HUMANS[0].Hunt(CART);
 				cout << "You now have " << CART.GetFood() << " pounds of food" << endl;
 
 				//Asks the user how well they want to eat untill they give a valid answer
+				validInput = false;
 				while (validInput == false)
 				{
 					cout << endl << "How well would you like to eat?" << endl;
@@ -489,8 +542,19 @@ int main()
 
 				CART.MoveDateForward(dateNums, 1); //Moves the date forward by 1 day
 				cout << "You hunted for one day." << endl;
+
+				//Checks if the player has a misfortune and then checks for raiders
+				if (newEvent.GetMisfortune() == true)
+				{
+					CART = newEvent.Misfortune(CART, HUMANS, dateNums);
+				}
+				if (newEvent.GetAttacked() == true)
+				{
+					CART = newEvent.Raiders(CART);
+				}
+
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLost(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
 				break;
 			case 4:
 				cout << "Unfortunately you had to end your trip to Oregon, but who knows what the future will hold." << endl;
@@ -503,5 +567,5 @@ int main()
 		}
 	}
 
-	cin >> charInput; //Test code
+	//cin >> charInput; //Test code
 }

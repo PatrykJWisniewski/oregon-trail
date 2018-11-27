@@ -6,6 +6,7 @@
 #ifndef HUMANS_H
 #define HUMANS_H
 #include "Cart.h"
+#include "Animal.h"
 #include <string>
 using namespace std;
 
@@ -15,9 +16,11 @@ private:
 	string name;
 	bool alive;
 	int randomNum;
+	Animal animals[5];
 
 public:
 	Humans();
+	int split(string str, char c, string array[], int size);
 	void SetName(string nameInput);
 	string GetName();
 	bool GetAlive();
