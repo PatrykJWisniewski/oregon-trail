@@ -17,7 +17,7 @@ private:
 	bool attacked;
 
 public:
-	Events(int distance);
+	Events(float distance);
 	int randomNumbers(int min, int max);
 	Cart Misfortune(Cart cart, Humans humans[], int dateNums[]);
 	Cart Raiders(Cart cart);

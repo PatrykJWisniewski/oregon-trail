@@ -11,7 +11,7 @@
 #include "Events.h"
 using namespace std;
 
-Events::Events(int M)
+Events::Events(float M)
 {
 	if (randomNumbers(1,100) > 60)
 	{

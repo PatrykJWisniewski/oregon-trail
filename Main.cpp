@@ -168,7 +168,7 @@ Milestones FindClosestMilestone(Milestones milestones[], int length, int travled
 	return milestones[index];
 }
 
-bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance)
+bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[])
 {
 	bool endGame = false;
 
@@ -202,6 +202,12 @@ bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance)
 		if (leader.GetAlive() == false)
 		{
 			cout << "Your leader has died." << endl;
+			endGame = true;
+		}
+
+		if (date[1] == 11 && date[2] == 30 && distance < 2040)
+		{
+			cout << "You didn't make it too Oregon in time. With winter on your heels your fate looked grim..." << endl;
 			endGame = true;
 		}
 	}
@@ -445,7 +451,7 @@ int main()
 				}
 
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
 			case 2:
 				//For each player in the game
@@ -486,7 +492,7 @@ int main()
 				}
 
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
 			case 3:
 				CART = HUMANS[0].Hunt(CART);
@@ -554,7 +560,7 @@ int main()
 				}
 
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
-				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled); //Checks to see if the player has lost
+				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
 			case 4:
 				cout << "Unfortunately you had to end your trip to Oregon, but who knows what the future will hold." << endl;
@@ -567,5 +573,5 @@ int main()
 		}
 	}
 
-	//cin >> charInput; //Test code
+	cin >> charInput; //Test code
 }
