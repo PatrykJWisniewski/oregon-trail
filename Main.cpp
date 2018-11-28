@@ -15,6 +15,7 @@
 #include "Results.h"
 using namespace std;
 
+//Algorithm - Splits a given string into multipal strings
 int split(string str, char c, string array[], int size)
 {
 	if (str.length() == 0) {
@@ -39,6 +40,10 @@ int split(string str, char c, string array[], int size)
 	return count;
 }
 
+//Algorithm - Allows the user to change a date withen a spesficed range
+//1. Shows the user what days they can change the date too
+//2. Keeps asking the user to input a date untill the input a valid date
+//3. Once a valid date is chosen, it sets the date too the users current date
 void ChangeDate(int dateNums[])
 {
 	string input;
@@ -58,26 +63,32 @@ void ChangeDate(int dateNums[])
 		try
 		{
 			stop = true;
+			//If the year is 1847...
 			if (stoi(date[0]) == 1847)
 			{
 				dateNums[0] = stoi(date[0]);
 			}
+			//If its not then keep asking the user
 			else
 			{
 				stop = false;
 			}
 
+			//If the month is between march and may...
 			if (stoi(date[1]) > 2 && stoi(date[1]) < 6)
 			{
 				dateNums[1] = stoi(date[1]);
 			}
+			//If not keep asking the user for a valid date
 			else
 			{
 				stop = false;
 			}
 
+			//If the day is valid...
 			if (stoi(date[2]) > 0 && stoi(date[2]) < 31)
 			{
+				//If the user choses April then condier the fact that the day cant be 31
 				if (dateNums[1] == 4 && stoi(date[2]) == 31)
 				{
 					stop = false;
@@ -87,6 +98,7 @@ void ChangeDate(int dateNums[])
 					dateNums[2] = stoi(date[2]);
 				}
 			}
+			//If not keep asking the user for a valid input
 			else
 			{
 				stop = false;
@@ -108,7 +120,10 @@ void ChangeDate(int dateNums[])
 	cout << "You must reach the Oregon City by 1847-11-30" << endl;
 }
 
-//Reads the text from both the river and fort milestone text files
+//Algorithm - Reads the text from both the river and fort milestone text files
+//1. Opens the two milestone files in order to read them later
+//2. Goes throuth each line of each text file and adds them too an array of milestones
+//3. Adds a final milestone for winning the game
 void ReadMilestones(Milestones mileStones[])
 {
 	ifstream myFile[2];
@@ -121,18 +136,23 @@ void ReadMilestones(Milestones mileStones[])
 	//Goes throuth each line in both files
 	int lineNum = 0;
 	int mileStoneNum = 1;
+
+	//Reads files twice. Once for each file
 	for (int i = 0; i < 2; i++)
 	{
+		//Reads all the lines in a gile
 		while (getline(myFile[i], line))
 		{
+			//If the line has the name...
 			if (lineNum == 0)
 			{
 				mileStones[mileStoneNum].SetName(line);
 				lineNum = 1;
 			}
+			//If the line has depth and distance
 			else if (lineNum == 1)
 			{
-				split(line, ' ', milestoneInfo, 2);
+				split(line, ' ', milestoneInfo, 2); //Splits the 2nd line in case its a river
 				mileStones[mileStoneNum].SetDistance(stoi(milestoneInfo[0]));
 				mileStones[mileStoneNum].SetDepth(stoi(milestoneInfo[1]));
 				//If the milestone is a fort...
@@ -149,19 +169,23 @@ void ReadMilestones(Milestones mileStones[])
 		}
 	}
 
+	//Sets a final milestone for winning the game
 	mileStones[11].SetName("Oregon city");
 	mileStones[11].SetDistance(2040);
 	mileStones[11].SetDepth(0);
 }
 
-//Find the closest milestone too the player
+//Algorithm - Find the closest milestone too the player
+//1. Goes throuth each milestone and finds the one closest too the player 
 Milestones FindClosestMilestone(Milestones milestones[], int length, int travled)
 {
 	int distanceFromPlayer = -20000;
 	int index = 0;
+	//For each milestone
 	for (int i = 0; i < length; i++)
 	{
-		int milestoneDistance = travled - milestones[i].GetDistance();
+		int milestoneDistance = travled - milestones[i].GetDistance(); //Gets the distance of this milestone from start
+		//Only counts the milestone if it ahead of the player and is not the first one
 		if (milestoneDistance > distanceFromPlayer && milestoneDistance < 0)
 		{
 			distanceFromPlayer = milestoneDistance;
@@ -175,46 +199,57 @@ Milestones FindClosestMilestone(Milestones milestones[], int length, int travled
 		index = 11;
 	}
 
-	return milestones[index];
+	return milestones[index]; //Returns the milestone that is coming up next
 }
 
+//Algorithm - Checks to see if the palyer has lost the game, won the game, and saves player data.
+//1. Checjs if the won condition for the game has been meet
+//2. Checks if any of lose condition have been meet
+//3. Saves the players resualt too a file if the game has endded
 bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[])
 {
 	bool endGame = false;
 
 	cout << endl;
 
+	//If the player has won the game...
 	if (distance == 2040)
 	{
 		cout << "CONGRATS YOU MADE IT TO OREGON CITY!!!" << endl;
 		endGame = true;
 	}
+	//If the player has not won the game...
 	else
 	{
+		//If the player has run out of food
 		if (cart.GetFood() <= 0)
 		{
 			cout << "The player has ran out of food." << endl;
 			endGame = true;
 		}
 
+		//If the player has run out of oxen
 		if (cart.GetOxen() == 0)
 		{
 			cout << "The player has ran out of oxen." << endl;
 			endGame = true;
 		}
 
+		//If the player loses a part but has no parts to lose
 		if (cart.GetParts() == -1)
 		{
 			cout << "Your wagon broke and you have no spare parts." << endl;
 			endGame = true;
 		}
 
+		//If the leader dies
 		if (leader.GetAlive() == false)
 		{
 			cout << "Your leader has died." << endl;
 			endGame = true;
 		}
 
+		//If the player does not make it before november 30th
 		if (date[1] > 11 && date[2] > 30 && distance < 2040)
 		{
 			cout << "You didn't make it too Oregon in time. With winter on your heels your fate looked grim..." << endl;
@@ -222,6 +257,7 @@ bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[
 		}
 	}
 
+	//If the game has come too an end...
 	if (endGame == true)
 	{
 		vector<Results> playerResualts; //A vector that has an array containg a players stats
@@ -312,7 +348,7 @@ bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[
 		cout << "Food Remaning: " << cart.GetFood() << endl;
 		cout << "Cash Remaning: " << cart.GetMoney() << endl;
 
-		//Saves final stats of the game too a text file
+		//Saves final stats of current player and past players of the game too a text file
 		ofstream myFile;
 		myFile.open("results.txt"); // Opens the file
 		for (int i = 0; i < playerResualts.size(); i++)
@@ -325,10 +361,10 @@ bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[
 		}
 	}
 
-	return endGame;
+	return endGame; //Returns if the game has endded to end the game loop if needed
 }
 
-//Prints out the players current status
+//Algorithm - Prints out the current player stats after a turn is compleated
 void PrintOutPlayerStatus(Cart cart, int dateNums[], int distance, Milestones nextM)
 {
 	cout << endl << "----CURRENT STATUS----" << endl;
@@ -342,10 +378,10 @@ void PrintOutPlayerStatus(Cart cart, int dateNums[], int distance, Milestones ne
 
 int main()
 {
+	//Class in game wide varaibles
 	Cart CART;
 	Humans HUMANS[5];
 	Milestones MILESTONES[12];
-	ReadMilestones(MILESTONES); //Reads the mile stones from the two next files and sorts them
 	int dateNums[3] = { 1847, 3, 28 };
 	int distanceTravled = 0;
 
@@ -355,6 +391,8 @@ int main()
 	char charInput;
 	bool validInput = false;
 	srand(time(0));
+
+	ReadMilestones(MILESTONES); //Reads the mile stones from the two next files and sorts them
 
 	cout << "THIS PROGRAM SIMULATES A TRIP OVER THE OREGON TRAIL FROM INDEPENDENCE, MISSOURI TO OREGON CITY, OREGON IN 1847." << endl;
 	cout << "YOUR FAMILY OF FIVE WILL COVER THE 2040 MILE OREGON TRAIL IN 5-6 MONTHS --- IF YOU MAKE IT ALIVE." << endl << endl;
@@ -379,11 +417,12 @@ int main()
 	cout << endl << "You are starting at mile: 0." << endl;
 	cout << "There are 2040 that you must travel to reach your destination." << endl;
 	cout << "Before the start of your trip, you can visit the store and buy supplies : food, oxen, bullets and wagon parts." << endl;
-	CART = MILESTONES[0].PromptUser(0, CART, HUMANS); //Will bring up the starting store
+	CART = MILESTONES[0].PromptUser(0, CART, HUMANS); //Will bring up the starting store and ask the user if they want to visit
 
 	//Asks the player if they are happy with the date or would like to change it
 	cout << "Your departure date curently is : 1847-03-28. Would you like to change it?" << endl;
 	bool stop = false;
+	//While the user has not given a valid input
 	while (stop == false)
 	{
 		cout << "Y / N" << endl;
@@ -417,6 +456,8 @@ int main()
 		cout << endl << dateNums[0] << "-" << dateNums[1] << "-" << dateNums[2] << endl;
 		Milestones nextMilestone = FindClosestMilestone(MILESTONES, 12, distanceTravled); //Finds the closet milestone
 		Events newEvent(distanceTravled); //Creates an event to be insiated later
+
+		//Prints the next milestone and the users turn options
 		cout << "Next milestone is " << nextMilestone.GetName() << " in " << nextMilestone.GetDistance() - distanceTravled << " miles" << endl;
 		cout << "1. REST" << endl;
 		cout << "2. CONTINUE" << endl;
@@ -438,7 +479,7 @@ int main()
 		//Will check what choice the user made
 		switch (inputNum)
 		{
-			case 1:
+			case 1: //If the player rests
 				randomNum = HUMANS[0].randomNumbers(1, 3); //Ramdonly chooses between 1 and 3 days of resting
 
 				//For each player in the game
@@ -463,7 +504,7 @@ int main()
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
 				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
-			case 2:
+			case 2: //If the player contuines 
 				//For each player in the game
 				for (int i = 0; i < 5; i++)
 				{
@@ -504,12 +545,13 @@ int main()
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
 				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
-			case 3:
-				CART = HUMANS[0].Hunt(CART);
+			case 3: //If the player hunts
+				CART = HUMANS[0].Hunt(CART); //Runs the hunt function in the player class
 				cout << "You now have " << CART.GetFood() << " pounds of food" << endl;
 
 				//Asks the user how well they want to eat untill they give a valid answer
 				validInput = false;
+				//While the player has not gave a valid input
 				while (validInput == false)
 				{
 					cout << endl << "How well would you like to eat?" << endl;
@@ -520,7 +562,7 @@ int main()
 
 					switch (charInput)
 					{
-					case '1':
+					case '1': //If the player wishs to eat poorly
 						validInput = true;
 						//For each player in the game
 						for (int i = 0; i < 5; i++)
@@ -528,7 +570,7 @@ int main()
 							CART.SetFood(CART.GetFood() - HUMANS[i].Rest(1, 2)); //Subtracts food from the players total for each human that is alive
 						}
 						break;
-					case '2':
+					case '2': //If the player wishes to eat moderarely
 						validInput = true;
 						//For each player in the game
 						for (int i = 0; i < 5; i++)
@@ -536,7 +578,7 @@ int main()
 							CART.SetFood(CART.GetFood() - HUMANS[i].Rest(1, 3)); //Subtracts food from the players total for each human that is alive
 						}
 						break;
-					case '3':
+					case '3': //If the player wishes to eat well
 						validInput = true;
 						//For each player in the game
 						for (int i = 0; i < 5; i++)
@@ -572,7 +614,7 @@ int main()
 				PrintOutPlayerStatus(CART, dateNums, distanceTravled, nextMilestone); //Prints out current Status
 				stop = CheckIfThePlayerLostOrWon(CART, HUMANS[0], distanceTravled, dateNums); //Checks to see if the player has lost
 				break;
-			case 4:
+			case 4: //If the player quits the game
 				cout << "Unfortunately you had to end your trip to Oregon, but who knows what the future will hold." << endl;
 				stop = true;
 				break;
@@ -582,6 +624,5 @@ int main()
 				break;
 		}
 	}
-
-	cin >> charInput; //Test code
+	//cin >> charInput; //Test code
 }

@@ -65,11 +65,11 @@ Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 			//The player has a 50% chance of living
 			if (randomNumbers(1, 100) > 50)
 			{
-				cout << "thankfully it looks like " << humans[rand].GetName() << " is going to be ok" << endl;
+				cout << " thankfully it looks like " << humans[rand].GetName() << " is going to be ok" << endl;
 			}
 			else
 			{
-				cout << "but unfortinaly " << humans[rand].GetName() << " didn't make it" << endl;
+				cout << " but unfortinaly " << humans[rand].GetName() << " didn't make it" << endl;
 				humans[rand].SetDead();
 			}
 		}

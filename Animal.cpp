@@ -11,56 +11,67 @@
 #include "Animal.h"
 using namespace std;
 
+//Default constructor. Left black since everything is set up in the human.cpp file
 Animal::Animal()
 {
 
 }
 
+//Sets the name of this animal
 void Animal::SetName(string newV)
 {
 	name = newV;
 }
 
+//Sets the probality of running into it
 void Animal::SetProb(int newV)
 {
 	probility = newV;
 }
 
+//Sets the min amount of food it gives out
 void Animal::SetMin(int newV)
 {
 	minFood = newV;
 }
 
+//Sets the max amount of food that it give out
 void Animal::SetMax(int newV)
 {
 	maxFood = newV;
 }
 
+//Sets the amount of bullets needed to kill it
 void Animal::SetCost(int newV)
 {
 	bulletCost = newV;
 }
 
+//Returns the name of the animal
 string Animal::GetName()
 {
 	return name;
 }
 
+//Returns the probibility of the animal
 int Animal::GetProb()
 {
 	return probility;
 }
 
+//Returns the min amount of food that the animal can drop
 int Animal::GetMin()
 {
 	return minFood;
 }
 
+//Returns the max amount of food that the animal can drop
 int Animal::GetMax()
 {
 	return maxFood;
 }
 
+//Returns the amount of bullets needed to kill the animal
 int Animal::GetCost()
 {
 	return bulletCost;

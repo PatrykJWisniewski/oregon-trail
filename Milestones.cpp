@@ -12,6 +12,7 @@
 #include "Humans.h"
 using namespace std;
 
+//Default constructor. Sets the defualt name and default costs
 Milestones::Milestones()
 {
 	name = "start";
@@ -25,6 +26,12 @@ Milestones::Milestones()
 	medCost = 25;
 }
 
+//Algorithm - Asks the user what they want to go based on of they are at a river, fort, or the start of the game
+//1. Checks to see if the player has reached a river then asks them the respective questions
+//2. Checks to see if the player arivved at a fort
+//3. Checks if its the players first time at a fort(the start of the game) or if they have started travelling in the game
+//4. Visits the store, rest, contines, or crosses the river based of player input
+//5. Returns an instance of the cart class
 Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 {
 	char input;
@@ -34,15 +41,17 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 	if (depth > 0)
 	{
 		cout << "You have reached the " << name << endl;
-		cout << "1. Cross the river" << endl;
-		cout << "2. Rest" << endl;
+		//While the player is resting
 		while (stop == false)
 		{
+			cout << "1. Cross the river" << endl;
+			cout << "2. Rest" << endl;
+
 			cin >> input;
 
 			switch (input)
 			{
-			case '1':
+			case '1': //If the player crosses the river
 				//If the depth of the river is greater then 3 feet...
 				if (depth > 3)
 				{
@@ -65,16 +74,18 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 				stop = true;
 				return cart;
 				break;
-			case '2':
+			case '2': //If the player rests
 				//For each player in the game
 				for (int i = 0; i < 5; i++)
 				{
 					cart.SetFood(cart.GetFood() - humans[i].Rest(1, 3)); //Subtracts food from the players total for each human that is alive
+					//If the player has lost then stop and return cart
 					if (cart.GetFood() <= 0)
 					{
 						return cart;
 					}
 				}
+				cout << endl << "You rested for one day" << endl << endl;
 				break;
 			default:
 				cout << "Please enter a valid input" << endl;
@@ -88,6 +99,7 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 		{
 			cout << "Would you like to visit the store?" << endl;
 
+			//While the input is not valid
 			while (stop == false)
 			{
 				cout << "Y / N" << endl;
@@ -98,12 +110,12 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 				case 'Y':
 				case 'y':
 					stop = true;
-					return VisitStore(distance, cart);
+					return VisitStore(distance, cart); //Returns the return value of visit store
 					break;
 				case 'N':
 				case 'n':
 					stop = true;
-					return cart;
+					return cart; //Returns the cart with no modifications
 					break;
 				default:
 					cout << "Please enter a valid input" << endl;
@@ -126,7 +138,7 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 				switch (input)
 				{
 				case '1':
-					VisitStore(distance, cart);
+					cart = VisitStore(distance, cart); //Returns the return value of the visitStore function
 					break;
 				case '2':
 					//For each player in the game
@@ -153,6 +165,11 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 	}
 }
 
+//Algorithm - Visists the store and asks the player what they want to buy
+//1. Checks if it's the players first time viisting the store
+//2. Asks the user what object they want to buy
+//3. Gives the user the name and price of what they want to buy and asks how much they want to buy
+//4. Returns an instance of the cart class
 Cart Milestones::VisitStore(int distance, Cart cart)
 {
 	string input;
@@ -218,14 +235,22 @@ Cart Milestones::VisitStore(int distance, Cart cart)
 				//If there was a valid input
 				if (inputNum > 0)
 				{
+					//If the palyer is buying oxen for the first time
 					if (distance == 0 && cart.GetOxen() == 0 && inputNum * 40 < 100 || inputNum * 40 > 200)
 					{
 						cout << "You did not choose a valid amount of yokes" << endl;
 						cout << "Current Bill: " << currentBill << endl;
 					}
+					//If the player is buying oxen in the first store
+					else if (cart.GetOxen() + (inputNum * 2) > 10 && distance == 0)
+					{
+						cout << "You can not buy this many more yokes" << endl;
+						cout << "Current Bill: " << currentBill << endl;
+					}
+					//If the player is buying new oxen at a diffrent store
 					else if (cart.GetOxen() + (inputNum * 2) > 9 && distance > 0)
 					{
-						cout << "You can not buy any more yokes" << endl;
+						cout << "You can not buy this many more yokes" << endl;
 						cout << "Current Bill: " << currentBill << endl;
 					}
 					else
