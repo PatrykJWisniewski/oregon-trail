@@ -143,6 +143,7 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 				case '3':
 					stop = true;
 					cout << "You leave the fort ready to push onward" << endl;
+					break;
 				default:
 					cout << "Please enter a valid input" << endl;
 				}

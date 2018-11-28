@@ -148,6 +148,10 @@ void ReadMilestones(Milestones mileStones[])
 			milestoneInfo[1] ="0"; //Reset the depth info
 		}
 	}
+
+	mileStones[11].SetName("Oregon city");
+	mileStones[11].SetDistance(2040);
+	mileStones[11].SetDepth(0);
 }
 
 //Find the closest milestone too the player
@@ -163,6 +167,12 @@ Milestones FindClosestMilestone(Milestones milestones[], int length, int travled
 			distanceFromPlayer = milestoneDistance;
 			index = i;
 		}
+	}
+	
+	//If the player beat the game
+	if (travled >= 2040)
+	{
+		index = 11;
 	}
 
 	return milestones[index];
@@ -205,7 +215,7 @@ bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[
 			endGame = true;
 		}
 
-		if (date[1] == 11 && date[2] == 30 && distance < 2040)
+		if (date[1] > 11 && date[2] > 30 && distance < 2040)
 		{
 			cout << "You didn't make it too Oregon in time. With winter on your heels your fate looked grim..." << endl;
 			endGame = true;
@@ -334,7 +344,7 @@ int main()
 {
 	Cart CART;
 	Humans HUMANS[5];
-	Milestones MILESTONES[11];
+	Milestones MILESTONES[12];
 	ReadMilestones(MILESTONES); //Reads the mile stones from the two next files and sorts them
 	int dateNums[3] = { 1847, 3, 28 };
 	int distanceTravled = 0;
@@ -405,9 +415,9 @@ int main()
 		string input;
 		int inputNum;
 		cout << endl << dateNums[0] << "-" << dateNums[1] << "-" << dateNums[2] << endl;
-		Milestones nextMilestone = FindClosestMilestone(MILESTONES, 11, distanceTravled); //Finds the closet milestone
+		Milestones nextMilestone = FindClosestMilestone(MILESTONES, 12, distanceTravled); //Finds the closet milestone
 		Events newEvent(distanceTravled); //Creates an event to be insiated later
-		cout << "Next milestone is the " << nextMilestone.GetName() << " in " << nextMilestone.GetDistance() - distanceTravled << " miles" << endl;
+		cout << "Next milestone is " << nextMilestone.GetName() << " in " << nextMilestone.GetDistance() - distanceTravled << " miles" << endl;
 		cout << "1. REST" << endl;
 		cout << "2. CONTINUE" << endl;
 		cout << "3. HUNT" << endl;
@@ -470,11 +480,11 @@ int main()
 					{
 						distanceTravled = 2040;
 					}
-					if (distanceTravled >= nextMilestone.GetDistance())
+					else if (distanceTravled >= nextMilestone.GetDistance())
 					{
 						distanceTravled = nextMilestone.GetDistance();
 						CART = nextMilestone.PromptUser(distanceTravled, CART, HUMANS);
-						nextMilestone = FindClosestMilestone(MILESTONES, 11, distanceTravled); //Finds the closet milestone
+						nextMilestone = FindClosestMilestone(MILESTONES, 12, distanceTravled); //Finds the closet milestone
 					}
 				}
 

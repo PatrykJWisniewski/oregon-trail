@@ -1,4 +1,24 @@
 Leader: f
+Miles Travled: 2040
+Food Remaning: 1000
+Cash Remaning: 570
+----
+Leader: d
+Miles Travled: 2040
+Food Remaning: 1000
+Cash Remaning: 550
+----
+Leader: no
+Miles Travled: 1395
+Food Remaning: 130
+Cash Remaning: 72
+----
+Leader: 7
+Miles Travled: 640
+Food Remaning: -3
+Cash Remaning: 150
+----
+Leader: f
 Miles Travled: 640
 Food Remaning: -37
 Cash Remaning: 150
