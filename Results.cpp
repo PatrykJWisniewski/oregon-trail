@@ -11,6 +11,10 @@ using namespace std;
 Results::Results()
 {
 	score = 0;
+	name = "";
+	miles = 0;
+	food = 0;
+	money = 0;
 }
 
 //Sets a players name		

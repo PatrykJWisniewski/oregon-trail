@@ -11,10 +11,14 @@
 #include "Animal.h"
 using namespace std;
 
-//Default constructor. Left black since everything is set up in the human.cpp file
+//Default constructor.
 Animal::Animal()
 {
-
+	name = "";
+	probility = 0;
+	minFood = 0;
+	maxFood = 0;
+	bulletCost = 0;
 }
 
 //Sets the name of this animal

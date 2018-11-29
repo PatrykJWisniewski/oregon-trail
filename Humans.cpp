@@ -12,17 +12,20 @@
 #include "Animal.h"
 using namespace std;
 
+//Default constructor
 Humans::Humans()
 {
 	name = "";
 	alive = true;
 
+	//Opens the animal info text file
 	ifstream myFile;
 	myFile.open("animalinfo.txt");
 	string info[5];
 	string line;
 
 	int i = 0;
+	//Reads each line in the text files and populats the animals array
 	while (getline(myFile, line))
 	{
 		split(line, ' ', info, 5);
@@ -35,6 +38,7 @@ Humans::Humans()
 	}
 }
 
+//Algorithm - Splits a given string into multipal strings
 int Humans::split(string str, char c, string array[], int size)
 {
 	if (str.length() == 0) {
@@ -59,32 +63,38 @@ int Humans::split(string str, char c, string array[], int size)
 	return count;
 }
 
+//Sets the name of this human and marks them as alive
 void Humans::SetName(string nameInput)
 {
 	name = nameInput;
 	alive = true;
 }
 
+//Returns the name of the human
 string Humans::GetName()
 {
 	return name;
 }
 
+//Returns if the player is alive
 bool Humans::GetAlive()
 {
 	return alive;
 }
 
+//Sets the player as dead
 void Humans::SetDead()
 {
 	alive = false;
 }
 
+//Returns a random number between the given min(inclusive) and max(inclusive)
 int Humans::randomNumbers(int min, int max)
 {
 	return (rand() % (max - min + 1)) + min;
 }
 
+//Algorithm - Rests for the amount of given while consuming food by the given amount
 int Humans::Rest(int days, int food)
 {
 	if (alive == true)
@@ -97,12 +107,13 @@ int Humans::Rest(int days, int food)
 	}
 }
 
-//Keeps asking the player if they wish to hunt untill a valid input is given
+//Algorithm - Keeps asking the player if they wish to hunt untill a valid input is given
 bool AskToHunt()
 {
 	bool stop = false;
 	char charInput;
 
+	//Untill there is a valid input
 	while (stop == false)
 	{
 		cout << "Y / N" << endl;
@@ -113,12 +124,12 @@ bool AskToHunt()
 		case 'Y':
 		case 'y':
 			stop = true;
-			return true;
+			return true; //Yes the player wants to hunt
 			break;
 		case 'N':
 		case 'n':
 			stop = true;
-			return false;
+			return false; //No the player does not want to hunt
 			break;
 		default:
 			cout << "Please enter a valid input" << endl;
@@ -126,6 +137,13 @@ bool AskToHunt()
 	}
 }
 
+//Algorithm - Lets the player hunt for animals
+//1. Checks the player ran into each animal one at a a time
+//2. If the player ran into an animal then ask if they want to hunt it
+//3. Check if the player has enouth bullets to hunt
+//4. Ask the player to play a puzzel and award them food if they win
+//5. Checks to see if the player ran into at least one animal
+//6. Return an instance of the cart class with modified variables
 Cart Humans::Hunt(Cart cart)
 {
 	bool nothingFound = true;
@@ -168,6 +186,7 @@ Cart Humans::Hunt(Cart cart)
 		}
 	}
 
+	//If the hunt was unsiccessful
 	if (nothingFound == true)
 	{
 		cout << "The hunt was unsuccessful." << endl;
@@ -182,6 +201,11 @@ Cart Humans::Hunt(Cart cart)
 	return cart;
 }
 
+//Algorithm - Has the user guess a randomly genarated number with 3 attempts
+//1. Creates a random number between 1 and 10
+//2. Asks the user to guess the number up to 3 times
+//3. Checks to make sure its a valid input
+//4. Returns if the player managed to guess the input correctly
 bool Humans::Puzzel()
 {
 	int randomNum = randomNumbers(1, 10);
@@ -207,12 +231,14 @@ bool Humans::Puzzel()
 			i--;
 		}
 
+		//If the input was a number but did not fall withen the bounds of 1-10
 		if (inputNum < 1 && badInput == false || inputNum > 10)
 		{
 			cout << "Please select a valid number" << endl;
 			i--;
 		}
 
+		//If the user correctly guessed the number
 		if (inputNum == randomNum)
 		{
 			cout << "You won!" << endl;
@@ -220,6 +246,7 @@ bool Humans::Puzzel()
 		}
 	}
 
+	//If the palyer did not corretly gues the number after 3 tries
 	if (inputNum != randomNum)
 	{
 		cout << "You lost" << endl;

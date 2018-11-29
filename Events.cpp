@@ -11,8 +11,10 @@
 #include "Events.h"
 using namespace std;
 
+//Parameterized constructors - Decides if there will be a misfortune/raider attack when intilizing an instance of this class
 Events::Events(float M)
 {
+	//40% chance of misfortune happening
 	if (randomNumbers(1,100) > 60)
 	{
 		misfortune = true;
@@ -29,6 +31,7 @@ Events::Events(float M)
 	probability--;
 	probability = probability / 10;
 
+	//Proabilitys rate of running into raiders
 	if (randomNumbers(1, 100) < probability*100)
 	{
 		attacked = true;
@@ -39,11 +42,18 @@ Events::Events(float M)
 	}
 }
 
+//Create a random number between the given min(inclusive) and max(inclusive)
 int Events::randomNumbers(int min, int max)
 {
 	return (rand() % (max - min + 1)) + min;
 }
 
+//Algorithm - Chooses what kind of misfortune to use on the player and preforms it
+//1. Creates a random number between 1 and 3 to decide what event will be used
+//2. Checks if the first event, the player getting sick, is going to occur
+//3. Checks if the second event, the player losing oxen, is going to occur
+//4. Checks if the third event, the player breaking their wagon, is going to occur
+//5. Preforms the correct action and then returns the modifyed stats in the instance of the Cart class
 Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 {
 	int randomNum = randomNumbers(1, 3); //Calculates what kind of misfortune it will be
@@ -102,7 +112,7 @@ Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 					else
 					{
 						cout << "Unfortinaly after resting for 3 days " << humans[rand].GetName() << " didn't make it" << endl;
-						humans[rand].SetDead();
+						humans[rand].SetDead(); //Sets the player to be dead and no longer consume food
 					}
 					stop = true;
 					break;
@@ -115,7 +125,7 @@ Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 					else
 					{
 						cout << "Unfortinaly after pressing on " << humans[rand].GetName() << " didn't make it" << endl;
-						humans[rand].SetDead();
+						humans[rand].SetDead(); //Sets the player to be dead and no longer consume food
 					}
 					stop = true;
 					break;
@@ -125,28 +135,38 @@ Cart Events::Misfortune(Cart cart, Humans humans[], int dateNums[])
 			}
 		}
 	}
+	//If the player is going to lose an oxen
 	else if (randomNum == 2)
 	{
+		//If the cart has oxen to lose, makes sure you don't have negative oxen
 		if (cart.GetOxen() > 0)
 		{
 			cart.SetOxen(cart.GetOxen() - 1);
 			cout << endl << "Oh no! One of the oxen has died. You have " << cart.GetOxen() << " oxen left" << endl;
 		}
 	}
+	//If the player is going to have a wheel break
 	else if (randomNum == 3)
 	{
-		cart.SetParts(cart.GetParts() - 1);
+		cart.SetParts(cart.GetParts() - 1); //Uses up a part
 		cout << endl << "Oh no! One of your wheels broke." << endl;
 	}
 
 	return cart;
 }
 
+//Algorithm - Notifies the player they are being attacked and lets them choose what they wish to do
+//1. Asks the player what they wish to do and keeps doing so untill the choose a valid option
+//2. If the player runs, the player loses resourses
+//3. If the player attacks they must pass a puzzel in order to win the battle
+//4. If the player surrenders they lose a quater of there cash
+//5. Returns an instance of the cart class with modifyed values based off the users actions
 Cart Events::Raiders(Cart cart)
 {
 	bool stop = false;
 	char input;
 
+	//Tells the user they are being attacked
 	cout << endl << "Riders Ahead! They look Hostile!" << endl;
 	cout << "What do you wish to do?" << endl;
 	cout << "1. Run" << endl;
@@ -178,12 +198,14 @@ Cart Events::Raiders(Cart cart)
 
 		case '2':
 			cout << "You decided to fight the riders!" << endl;
+			//Runs the puzzel and if the player wins awards them resources
 			if (Puzzel() == true)
 			{
 				cart.SetFood(cart.GetFood() + 50);
 				cart.SetAmmo(cart.GetAmmo() + 50);
 				cout << "After fending off the riders you gained 50 pounds of food and 50 bullets!" << endl;
 			}
+			//If the player lost then take away resources from the player
 			else
 			{
 				cart.SetAmmo(cart.GetAmmo() - 50);
@@ -194,7 +216,7 @@ Cart Events::Raiders(Cart cart)
 			break;
 
 		case '3':
-			cart.SetMoney(cart.GetMoney()*.75);
+			cart.SetMoney(cart.GetMoney()*.75); //Surrenders a quater of the players cash
 			cout << "You surrendered a quater of your cash and contined on your way." << endl;
 			stop = true;
 			break;
@@ -206,16 +228,23 @@ Cart Events::Raiders(Cart cart)
 	return cart;
 }
 
+//Returns if a misfortune is going to occur
 bool Events::GetMisfortune()
 {
 	return misfortune;
 }
 
+//Returns if an attack is going to happen
 bool Events::GetAttacked()
 {
 	return attacked;
 }
 
+//Algorithm - Has the user guess a randomly genarated number with 3 attempts
+//1. Creates a random number between 1 and 10
+//2. Asks the user to guess the number up to 3 times
+//3. Checks to make sure its a valid input
+//4. Returns if the player managed to guess the input correctly
 bool Events::Puzzel()
 {
 	int randomNum = randomNumbers(1, 10);
@@ -241,12 +270,14 @@ bool Events::Puzzel()
 			i--;
 		}
 
+		//If the input was a number but did not fall withen the bounds of 1-10
 		if (inputNum < 1 && badInput == false || inputNum > 10)
 		{
 			cout << "Please select a valid number" << endl;
 			i--;
 		}
 
+		//If the user correctly guessed the number
 		if (inputNum == randomNum)
 		{
 			cout << "You won!" << endl;
@@ -254,6 +285,7 @@ bool Events::Puzzel()
 		}
 	}
 
+	//If the palyer did not corretly gues the number after 3 tries
 	if (inputNum != randomNum)
 	{
 		cout << "You lost" << endl;

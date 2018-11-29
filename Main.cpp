@@ -177,6 +177,7 @@ void ReadMilestones(Milestones mileStones[])
 
 //Algorithm - Find the closest milestone too the player
 //1. Goes throuth each milestone and finds the one closest too the player 
+//2. Returns the next closest milestone
 Milestones FindClosestMilestone(Milestones milestones[], int length, int travled)
 {
 	int distanceFromPlayer = -20000;
@@ -206,6 +207,7 @@ Milestones FindClosestMilestone(Milestones milestones[], int length, int travled
 //1. Checjs if the won condition for the game has been meet
 //2. Checks if any of lose condition have been meet
 //3. Saves the players resualt too a file if the game has endded
+//4. Returns a bool wheather the game has endded
 bool CheckIfThePlayerLostOrWon(Cart cart, Humans leader, int distance, int date[])
 {
 	bool endGame = false;

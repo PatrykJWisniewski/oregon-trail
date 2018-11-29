@@ -377,7 +377,7 @@ Cart Milestones::VisitStore(int distance, Cart cart)
 
 			case 6:
 				cout << "Thanks for visting the store. Good luck out there." << endl;
-				cart.SetMoney(cart.GetMoney() - currentBill);
+				cart.SetMoney(cart.GetMoney() - currentBill); //Removes the final bill from the players total money
 				cout << "You have $" << cart.GetMoney() << " left" << endl;
 				stop = true;
 				break;
@@ -390,6 +390,9 @@ Cart Milestones::VisitStore(int distance, Cart cart)
 	return cart;
 }
 
+//Algorithm - Converts the players input from a string too an int
+//1. Trys to convert the string too an int
+//2. If it fails it tells the user to try again and returns an invalid num
 int Milestones::ConvertInput(string input)
 {
 	int inputNum;
@@ -402,38 +405,44 @@ int Milestones::ConvertInput(string input)
 	//Will tell the user to select a valid option this time
 	catch (std::exception& e)
 	{
-		inputNum = -1;
+		inputNum = -1; //-1 is invalid at milestones
 		cout << "Please select a valid option" << endl;
 	}
 
 	return inputNum;
 }
 
+//Sets the precent increase of items at this milestone. 
 void Milestones::SetPriceIncrease(float increase)
 {
 	priceIncrease = increase;
 }
 
+//Sets the name of this milestone
 void Milestones::SetName(string newName)
 {
 	name = newName;
 }
 
+//Returns the name of this milestone
 string Milestones::GetName()
 {
 	return name;
 }
 
+//Sets the distance of this milestone from the starting location
 void Milestones::SetDistance(int newDistance)
 {
 	distance = newDistance;
 }
 
+//Returns the distance of this milestone from the starting location
 int Milestones::GetDistance()
 {
 	return distance;
 }
 
+//Sets the depth of this milestone
 void Milestones::SetDepth(int newDepth)
 {
 	depth = newDepth;
