@@ -13,14 +13,14 @@ Miles Travled: 1395
 Food Remaning: 130
 Cash Remaning: 72
 ----
-Leader: f
-Miles Travled: 640
-Food Remaning: -37
-Cash Remaning: 150
-----
 Leader: 7
 Miles Travled: 640
 Food Remaning: -3
+Cash Remaning: 150
+----
+Leader: f
+Miles Travled: 640
+Food Remaning: -37
 Cash Remaning: 150
 ----
 Leader: p
@@ -38,6 +38,21 @@ Miles Travled: 434
 Food Remaning: -135
 Cash Remaning: 75
 ----
+Leader: fF
+Miles Travled: 304
+Food Remaning: 0
+Cash Remaning: 81.25
+----
+Leader: 6
+Miles Travled: 304
+Food Remaning: -5
+Cash Remaning: 100
+----
+Leader: g
+Miles Travled: 304
+Food Remaning: -98
+Cash Remaning: 52
+----
 Leader: f
 Miles Travled: 303
 Food Remaning: -50
@@ -53,15 +68,15 @@ Miles Travled: 185
 Food Remaning: 570
 Cash Remaning: 250
 ----
-Leader: 8
-Miles Travled: 180
-Food Remaning: 125
-Cash Remaning: 450
-----
 Leader: b
 Miles Travled: 180
 Food Remaning: 350
 Cash Remaning: 250
+----
+Leader: 8
+Miles Travled: 180
+Food Remaning: 125
+Cash Remaning: 450
 ----
 Leader: *
 Miles Travled: 100
@@ -74,12 +89,22 @@ Food Remaning: 790
 Cash Remaning: 300
 ----
 Leader: f
-Miles Travled: 0
+Miles Travled: 90
 Food Remaning: 790
-Cash Remaning: 380
+Cash Remaning: 35
 ----
 Leader: g
 Miles Travled: 0
 Food Remaning: 790
 Cash Remaning: 500
+----
+Leader: d
+Miles Travled: 0
+Food Remaning: -10
+Cash Remaning: 1200
+----
+Leader: f
+Miles Travled: 0
+Food Remaning: 790
+Cash Remaning: 380
 ----

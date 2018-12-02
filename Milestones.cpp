@@ -36,6 +36,7 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 {
 	char input;
 	bool stop = false;
+	int humansAlive = 0;
 
 	//If the player has reached a river
 	if (depth > 0)
@@ -60,19 +61,30 @@ Cart Milestones::PromptUser(int distance, Cart cart, Humans humans[])
 					{
 						if (humans[i].GetAlive() == true)
 						{
-							cart.SetMoney(cart.GetMoney() - 10);
+							humansAlive++;
 						}
 					}
 
-					cout << "You crossed the river by ferry paying $10 per person" << endl;
+					//Checks if the player has enouth money to cross the river
+					if (cart.GetMoney() > humansAlive * 10)
+					{
+						cart.SetMoney(cart.GetMoney() - (humansAlive * 10));
+						cout << "You crossed the river by ferry paying $10 per person" << endl;
+						stop = true;
+						return cart;
+					}
+					else
+					{
+						cout << "You do not have enouth money to cross the river..." << endl;
+					}
 				}
 				//If not then allow the player to cross without paying a fee
 				else
 				{
 					cout << "The river proved shallow enouth to cross on your own so you pushed on with the cart in tow" << endl;
+					stop = true;
+					return cart;
 				}
-				stop = true;
-				return cart;
 				break;
 			case '2': //If the player rests
 				//For each player in the game

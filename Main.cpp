@@ -626,5 +626,5 @@ int main()
 				break;
 		}
 	}
-	//cin >> charInput; //Test code
+	cin >> charInput; //Test code
 }
